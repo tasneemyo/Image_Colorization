@@ -8,6 +8,7 @@ import numpy as np
 from notebooks.unet import UNet
 import torch
 import torchvision.transforms as T
+from torchvision import transforms
 # from colorize import colorize   
 
 class MainApp(QMainWindow):
@@ -18,12 +19,12 @@ class MainApp(QMainWindow):
         self.apply_styles()
 
         self.image_path = None
-        self.weights_path="Weights/best_unet_colorization.pth"
+        self.weights_path="Weights/unet_colorization.pth"
         # Connect buttons
         self.ui.upload.clicked.connect(self.upload_image)
         self.ui.colorize.clicked.connect(self.process_image)
         self.model=UNet()
-        self.model.load_state_dict(torch.load("Weights/best_unet_colorization.pth", map_location="cpu"))
+        self.model.load_state_dict(torch.load(self.weights_path, map_location="cpu"))
         self.model.eval()
     def apply_styles(self):
         self.setStyleSheet("""
@@ -84,31 +85,38 @@ class MainApp(QMainWindow):
             return
 
         # Load input image
-        img = Image.open(self.image_path).convert("L")   # grayscale
-
-        # Preprocess
-        transform = T.Compose([
-            T.Resize((256, 256)),
-            T.ToTensor(),
-        ])
-        img_tensor = transform(img).unsqueeze(0)  # (1, 1, H, W)
-
-        # Model inference
+        transform = transforms.Compose([
+        transforms.Resize((256, 256)),
+        transforms.ToTensor(),
+    ])
+        gray = Image.open(self.image_path).convert("L")   # grayscale
+        gray_tensor = transform(gray).unsqueeze(0)
         with torch.no_grad():
-            output = self.model(img_tensor)       # (1, 2, H, W)
+            pred_color = self.model(gray_tensor).cpu().squeeze(0)
+        pred_color = transforms.ToPILImage()(pred_color)
+        # Preprocess
+        # transform = T.Compose([
+        #     T.Resize((256, 256)),
+        #     T.ToTensor(),
+        # ])
+        # img_tensor = transform(img).unsqueeze(0)  # (1, 1, H, W)
 
-        # Convert logits → probabilities
-        output = torch.softmax(output, dim=1)
+        # # Model inference
+        # with torch.no_grad():
+        #     output = self.model(img_tensor)       # (1, 2, H, W)
 
-        # Take predicted channel
-        pred = torch.argmax(output, dim=1).squeeze(0)    # (H, W)
+        # # Convert logits → probabilities
+        # output = torch.softmax(output, dim=1)
 
-        # Convert to displayable image
-        pred_np = (pred.cpu().numpy() * 255).astype(np.uint8)
-        output_img = Image.fromarray(pred_np)
+        # # Take predicted channel
+        # pred = torch.argmax(output, dim=1).squeeze(0)    # (H, W)
+
+        # # Convert to displayable image
+        # pred_np = (pred.cpu().numpy() * 255).astype(np.uint8)
+        # output_img = Image.fromarray(pred_np)
 
         # Save temporary result
-        output_img.save("temp_output.png")
+        pred_color.save("temp_output.png")
         pixmap = QPixmap("temp_output.png")
 
         # Show result

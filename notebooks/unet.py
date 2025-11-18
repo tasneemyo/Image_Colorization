@@ -26,8 +26,7 @@ class UNet(nn.Module):
         self.up1 = nn.ConvTranspose2d(128, 64, 2, stride=2)
         self.dec1 = conv_block(128, 64)
 
-        # self.final = nn.Conv2d(64, 3, 1)  # 3 channels for RGB output
-        self.final = nn.Conv2d(64, 2, 1) 
+        self.final = nn.Conv2d(64, 3, 1)  # 3 channels for RGB output
 
     def forward(self, x):
         e1 = self.enc1(x)
@@ -44,7 +43,5 @@ class UNet(nn.Module):
         d1 = self.up1(d2)
         d1 = torch.cat([d1, e1], dim=1)
         d1 = self.dec1(d1)
-        # out = torch.sigmoid(self.final(d1))
-        out = self.final(d1)
-
+        out = torch.sigmoid(self.final(d1))
         return out
