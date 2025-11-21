@@ -9,7 +9,7 @@ import os
 from val import test_model_with_images,image_urls,test_model_with_metrics
 if __name__=="__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = MainModel().to(device)
+    model = MainModel()
     print("Generator Summary:")
     summary(model.net_G, input_size=(1, 256, 256))  # Input: Grayscale image (1 channel)
 
