@@ -1,4 +1,4 @@
-import tqdm
+from tqdm import tqdm
 from utils import *
 def update_losses(model, loss_meter_dict, count):
     for loss_name, loss_meter in loss_meter_dict.items():
