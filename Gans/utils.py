@@ -95,6 +95,8 @@ def init_model(model, device):
     return model
 
 
+
+
 def visualize(model, data, save=True):
     model.net_G.eval()
     with torch.no_grad():
@@ -122,11 +124,13 @@ def visualize(model, data, save=True):
         axes[2, i].axis("off")
     
     plt.tight_layout()
-    if save:
-        fig.savefig(f"colorization_{time.time()}.png")
     
-    # Ensure figure displays in Kaggle
-    plt.show()
+    if save:
+        fig.savefig(f"colorization_{int(time.time())}.png")
+    
+    # --- This ensures Kaggle actually renders the figure ---
+    plt.show(block=True)
+    plt.close(fig)  # Close figure to prevent memory issues
 
 def log_results(loss_meter_dict):
     for loss_name, loss_meter in loss_meter_dict.items():
