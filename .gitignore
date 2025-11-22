@@ -14,7 +14,7 @@ env/
 *.env
 *.env.*
 *.ui
-
+*.pdf
 Weights/
 
 
