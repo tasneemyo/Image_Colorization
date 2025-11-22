@@ -39,7 +39,7 @@ if __name__=="__main__":
     Ls, abs_ = data['L'], data['ab']
     print(Ls.shape, abs_.shape)
     print(len(train_dl), len(val_dl))  
-    train_model(model, train_dl,val_dl,10)
+    train_model(model, train_dl,val_dl,1)
     save_path = "/kaggle/working/"
 
 # Ensure the directory exists
