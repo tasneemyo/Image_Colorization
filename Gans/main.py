@@ -37,8 +37,8 @@ if __name__=="__main__":
     print("Train =", len(train_paths), "Val =", len(val_paths))
     data = next(iter(train_dl))
     Ls, abs_ = data['L'], data['ab']
-    print(Ls.shape, abs_.shape)
-    print(len(train_dl), len(val_dl))  
+    # print(Ls.shape, abs_.shape)
+    # print(len(train_dl), len(val_dl))  
     train_model(model, train_dl,val_dl,1)
     save_path = "/kaggle/working/"
 

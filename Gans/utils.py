@@ -93,31 +93,40 @@ def init_model(model, device):
     model = model.to(device)
     model = init_weights(model)
     return model
+
+
 def visualize(model, data, save=True):
     model.net_G.eval()
     with torch.no_grad():
         model.setup_input(data)
         model.forward()
     model.net_G.train()
+    
     fake_color = model.fake_color.detach()
     real_color = model.ab
     L = model.L
     fake_imgs = lab_to_rgb(L, fake_color)
     real_imgs = lab_to_rgb(L, real_color)
-    fig = plt.figure(figsize=(15, 8))
+    
+    fig, axes = plt.subplots(3, 5, figsize=(15, 8))
+    
     for i in range(5):
-        ax = plt.subplot(3, 5, i + 1)
-        ax.imshow(L[i][0].cpu(), cmap='gray')
-        ax.axis("off")
-        ax = plt.subplot(3, 5, i + 1 + 5)
-        ax.imshow(fake_imgs[i])
-        ax.axis("off")
-        ax = plt.subplot(3, 5, i + 1 + 10)
-        ax.imshow(real_imgs[i])
-        ax.axis("off")
-    plt.show()
+        # L channel
+        axes[0, i].imshow(L[i][0].cpu(), cmap='gray')
+        axes[0, i].axis("off")
+        # Fake color
+        axes[1, i].imshow(fake_imgs[i])
+        axes[1, i].axis("off")
+        # Real color
+        axes[2, i].imshow(real_imgs[i])
+        axes[2, i].axis("off")
+    
+    plt.tight_layout()
     if save:
         fig.savefig(f"colorization_{time.time()}.png")
+    
+    # Ensure figure displays in Kaggle
+    plt.show()
 
 def log_results(loss_meter_dict):
     for loss_name, loss_meter in loss_meter_dict.items():
