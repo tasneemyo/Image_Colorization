@@ -2,14 +2,15 @@ import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
+from Gans.utils import lab_to_rgb
+from Gans.val import postprocess_and_display, preprocess_image
 from gui import Ui_MainWindow
 from PIL import Image
 import numpy as np
-from notebooks.unet import UNet
+from Gans.model import MainModel
 import torch
 import torchvision.transforms as T
 from torchvision import transforms
-# from colorize import colorize   
 
 class MainApp(QMainWindow):
     def __init__(self):
@@ -19,11 +20,11 @@ class MainApp(QMainWindow):
         self.apply_styles()
 
         self.image_path = None
-        self.weights_path="Weights/unet_colorization.pth"
+        self.weights_path="Weights/Unet_colorization_model.pth"
         # Connect buttons
         self.ui.upload.clicked.connect(self.upload_image)
         self.ui.colorize.clicked.connect(self.process_image)
-        self.model=UNet()
+        self.model=MainModel()
         self.model.load_state_dict(torch.load(self.weights_path, map_location="cpu"))
         self.model.eval()
     def apply_styles(self):
@@ -83,40 +84,29 @@ class MainApp(QMainWindow):
     def process_image(self):
         if not self.image_path:
             return
+        self.model.net_G.eval()  # Set the model to evaluation mode
+        
+        
 
         # Load input image
         transform = transforms.Compose([
         transforms.Resize((256, 256)),
         transforms.ToTensor(),
     ])
-        gray = Image.open(self.image_path).convert("L")   # grayscale
-        gray_tensor = transform(gray).unsqueeze(0)
+        gray = Image.open(self.image_path).convert("RGB")
+        # gray=cv2.imread(self.image_path)
+        L_tensor = preprocess_image(gray, 256)  # Preprocess the image
         with torch.no_grad():
-            pred_color = self.model(gray_tensor).cpu().squeeze(0)
-        pred_color = transforms.ToPILImage()(pred_color)
-        # Preprocess
-        # transform = T.Compose([
-        #     T.Resize((256, 256)),
-        #     T.ToTensor(),
-        # ])
-        # img_tensor = transform(img).unsqueeze(0)  # (1, 1, H, W)
-
-        # # Model inference
-        # with torch.no_grad():
-        #     output = self.model(img_tensor)       # (1, 2, H, W)
-
-        # # Convert logits → probabilities
-        # output = torch.softmax(output, dim=1)
-
-        # # Take predicted channel
-        # pred = torch.argmax(output, dim=1).squeeze(0)    # (H, W)
-
-        # # Convert to displayable image
-        # pred_np = (pred.cpu().numpy() * 255).astype(np.uint8)
-        # output_img = Image.fromarray(pred_np)
-
-        # Save temporary result
-        pred_color.save("temp_output.png")
+            fake_ab = self.model.net_G(L_tensor) 
+         # Predict ab channels
+        L = L_tensor.cpu()
+        ab = fake_ab.cpu()
+        fake_rgb = lab_to_rgb(L, ab)[0]
+        # print(fake_rgb)
+        fake_rgb = transforms.ToPILImage()(fake_rgb)
+        
+        
+        fake_rgb.save("temp_output.png")
         pixmap = QPixmap("temp_output.png")
 
         # Show result

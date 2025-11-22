@@ -1,6 +1,6 @@
 import torch.nn as nn
 import torch
-from utils import init_model,GANLoss
+from Gans.utils import init_model, GANLoss
 from torch import optim
 class UnetBlock(nn.Module):
     def __init__(self, nf, ni, submodule=None, input_c=None, dropout=False,

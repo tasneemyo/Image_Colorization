@@ -4,7 +4,7 @@ from io import BytesIO
 import torch
 import numpy as np
 from skimage.color import rgb2lab
-from utils import lab_to_rgb,calculate_psnr,calculate_ssim
+from Gans.utils import lab_to_rgb,calculate_psnr,calculate_ssim
 import matplotlib.pyplot as plt
  
 def download_image(url):
@@ -77,6 +77,7 @@ def test_model_with_images(model, image_urls, size=256):
         img = download_image(url)  # Download the image
         if img is None:
             continue
+        print(img.shape)
         L_tensor = preprocess_image(img, size)  # Preprocess the image
         with torch.no_grad():
             fake_ab = model.net_G(L_tensor)  # Predict ab channels
