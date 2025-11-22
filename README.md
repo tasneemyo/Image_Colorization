@@ -1,4 +1,4 @@
-'# 🌈 Image Colorization Using GANs
+# Image Colorization Using GANs
 *A U-Net Generator with a PatchGAN Discriminator*
 
 This repository implements a **deep learning–based image colorization system** using a **Conditional Generative Adversarial Network (cGAN)**.  
@@ -20,7 +20,7 @@ Image_Colorization/
 │   ├── model.py
 │   ├── train.py
 │   ├── utils.py
-├── download_data.py
+├── gui.py
 ├── main.py
 └── README.md
 ```
@@ -46,23 +46,19 @@ pip install torch torchvision pillow matplotlib numpy opencv-python requests
 
 ## 🚀 Training
 ```
-python main.py
+python Gans.main.py
 ```
 
 ## 🎨 Visualization
-Results include input grayscale, predicted color, and ground truth.
+python main.py
 
-## 🖼 Inference
+<!-- ## 🖼 Inference
 Colorize external images:
 ```
 colorize_image(model, "Unet_colorization_model.pth", img_path)
-```
+``` -->
 
 ## ✔ Requirements
 - Python 3.7+
 - PyTorch
 - (Optional) CUDA GPU
-
-## 📝 License
-MIT License
-'
