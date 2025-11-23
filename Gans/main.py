@@ -6,8 +6,19 @@ import numpy as np
 import glob
 from torchsummary import summary
 import os
+import argparse
 from val import test_model_with_images,image_urls,test_model_with_metrics
 if __name__=="__main__":
+    parser=argparse.ArgumentParser()
+    parser.add_argument("epochs",type=int)
+    parser.add_argument("data_path",type=str)
+    parser.add_argument("train",type=bool)
+    parser.add_argument("test",type=bool)
+    parser.add_argument("save_path",type=str,default="/kaggle/working/")
+    parser.add_argument("save_images",type=bool,default=False)
+
+    args=parser.parse_args()
+    
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = MainModel()
     print("Generator Summary:")
@@ -15,9 +26,11 @@ if __name__=="__main__":
 
     print("\nDiscriminator Summary:")
     summary(model.net_D, input_size=(3, 256, 256))
-    dataset_root = "/kaggle/input/image-colorization-dataset/data" 
-    train_color_paths = glob.glob("/kaggle/input/image-colorization-dataset/data/train_color/*.*")
-    test_color_paths  = glob.glob("/kaggle/input/image-colorization-dataset/data/test_color/*.*")
+    dataset_root = args.data_path
+    train_color_paths=dataset_root+"/train_color/*.*"
+    test_color_paths=dataset_root+"/test_color/*.*"
+    train_color_paths = glob.glob(train_color_paths)
+    test_color_paths  = glob.glob(test_color_paths)
 
     print("Found:", len(train_color_paths), "train_color images")
     print("Found:", len(test_color_paths), "test_color images")
@@ -39,8 +52,9 @@ if __name__=="__main__":
     Ls, abs_ = data['L'], data['ab']
     # print(Ls.shape, abs_.shape)
     # print(len(train_dl), len(val_dl))  
-    train_model(model, train_dl,val_dl,1)
-    save_path = "/kaggle/working/"
+    if args.train:
+        train_model(model, train_dl,val_dl,args.epochs)
+    save_path = args.save_path
 
 # Ensure the directory exists
     os.makedirs(save_path, exist_ok=True)
@@ -50,6 +64,7 @@ if __name__=="__main__":
     torch.save(model.state_dict(), model_file_path)
 
     print(f"Model saved at {model_file_path}")
-    test_model_with_images(model, image_urls)
-    test_model_with_metrics(model, val_dl, num_samples=10)
+    if args.test:
+        test_model_with_images(model, image_urls)
+        test_model_with_metrics(model, val_dl, num_samples=10)
     
