@@ -10,12 +10,12 @@ import argparse
 from val import test_model_with_images,image_urls,test_model_with_metrics
 if __name__=="__main__":
     parser=argparse.ArgumentParser()
-    parser.add_argument("epochs",type=int)
-    parser.add_argument("data_path",type=str)
-    parser.add_argument("train",type=bool)
-    parser.add_argument("test",type=bool)
-    # parser.add_argument("save_path",type=str,default="/kaggle/working/",required=False)
-    # parser.add_argument("save_images",type=bool,default=False,required=False)
+    parser.add_argument("--epochs",type=int)
+    parser.add_argument("--data_path",type=str)
+    parser.add_argument("--train",type=bool)
+    parser.add_argument("--test",type=bool)
+    parser.add_argument("--save_path",type=str,default="/kaggle/working/",required=False)
+    parser.add_argument("--save_images",type=bool,default=False,required=False)
 
     args=parser.parse_args()
     
@@ -54,7 +54,7 @@ if __name__=="__main__":
     # print(len(train_dl), len(val_dl))  
     if args.train:
         train_model(model, train_dl,val_dl,args.epochs)
-    save_path = "/kaggle/working"
+    save_path = args.save_path
 
 # Ensure the directory exists
     os.makedirs(save_path, exist_ok=True)
