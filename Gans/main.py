@@ -52,8 +52,9 @@ if __name__=="__main__":
     Ls, abs_ = data['L'], data['ab']
     # print(Ls.shape, abs_.shape)
     # print(len(train_dl), len(val_dl))  
+    loss_G,loss_D=[],[]
     if args.train:
-        train_model(model, train_dl,val_dl,args.epochs)
+        train_model(model, train_dl,val_dl,args.epochs,loss_D=loss_D,loss_G=loss_G)
     save_path = args.save_path
 
 # Ensure the directory exists

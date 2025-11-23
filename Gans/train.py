@@ -1,3 +1,4 @@
+import json
 from tqdm import tqdm
 from utils import *
 def update_losses(model, loss_meter_dict, count):
@@ -36,10 +37,12 @@ def create_loss_meters():
             'loss_G': loss_G}
 
 
-def train_model(model, train_dl,val_dl, epochs, display_every=250):
+def train_model(model, train_dl,val_dl, epochs, loss_G,loss_D,display_every=250):
     data = next(iter(val_dl)) # getting a batch for visualizing the model output after fixed intrvals
     for e in range(epochs):
         loss_meter_dict = create_loss_meters() # function returing a dictionary of objects to
+        loss_G.append(loss_meter_dict['loss_G'])
+        loss_D.append(loss_meter_dict['loss_D'])
         i = 0                                  # log the losses of the complete network
         for data in tqdm(train_dl):
             model.setup_input(data)
@@ -51,4 +54,11 @@ def train_model(model, train_dl,val_dl, epochs, display_every=250):
                 print(f"Iteration {i}/{len(train_dl)}")
                 log_results(loss_meter_dict) # function to print out the losses
                 # visualize(model, data, save=False) # function displaying the model's outputs
+    losses_to_save = {
+            "loss_G": loss_G,
+            "loss_D": loss_D
+        }
+
+    with open("losses.json", "w") as f:
+        json.dump(losses_to_save, f, indent=4)
 
