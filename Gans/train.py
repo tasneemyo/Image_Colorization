@@ -58,7 +58,7 @@ def train_model(model, train_dl,val_dl, epochs, loss_G,loss_D,display_every=250)
         "loss_G": [float(x.avg) for x in loss_G],
         "loss_D": [float(x.avg) for x in loss_D],
     }
-    json.dump(losses_to_save, f, indent=4)
+    # json.dump(losses_to_save, f, indent=4)
 
 
     with open("losses.json", "w") as f:
