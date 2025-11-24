@@ -55,8 +55,8 @@ def train_model(model, train_dl,val_dl, epochs, loss_G,loss_D,display_every=250)
                 log_results(loss_meter_dict) # function to print out the losses
                 # visualize(model, data, save=False) # function displaying the model's outputs
     losses_to_save = {
-        "loss_G": [float(x) for x in loss_G],
-        "loss_D": [float(x) for x in loss_D],
+        "loss_G": [float(x.avg) for x in loss_G],
+        "loss_D": [float(x.avg) for x in loss_D],
     }
     json.dump(losses_to_save, f, indent=4)
 
