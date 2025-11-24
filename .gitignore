@@ -1,23 +1,12 @@
-
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 *.sqlite3
 
-
 venv/
 env/
 .venv/
 
-
-*.env
-*.env.*
-*.ui
-*.pdf
-*.png
+*.pdf  
 Weights/
-
-
-
-

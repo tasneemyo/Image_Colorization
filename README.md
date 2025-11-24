@@ -49,7 +49,7 @@ inference on external images**.
 
 ## 📦 Installation
 
-    pip install torch torchvision pillow matplotlib numpy opencv-python requests
+    pip install torch torchvision matplotlib numpy opencv-python requests
 
 ## 🚀 Training
 
