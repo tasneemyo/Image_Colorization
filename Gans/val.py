@@ -77,7 +77,7 @@ def test_model_with_images(model, image_urls, size=256):
         img = download_image(url)  # Download the image
         if img is None:
             continue
-        print(img.shape)
+        # print(img.shape)
         L_tensor = preprocess_image(img, size)  # Preprocess the image
         with torch.no_grad():
             fake_ab = model.net_G(L_tensor)  # Predict ab channels
