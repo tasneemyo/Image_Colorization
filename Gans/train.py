@@ -1,6 +1,6 @@
 import json
 from tqdm import tqdm
-from Gans.utils import *
+from utils import *
 def update_losses(model, loss_meter_dict, count):
     for loss_name, loss_meter in loss_meter_dict.items():
         loss = getattr(model, loss_name)
