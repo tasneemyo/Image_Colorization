@@ -76,7 +76,7 @@ class PatchDiscriminator(nn.Module):
     def forward(self, x):
         return self.model(x)
 class MainModel(nn.Module):
-    def __init__(self, net_G=None, lr_G=2e-4, lr_D=5e-5,
+    def __init__(self, net_G=None, lr_G=2e-4, lr_D=2e-4,
                  beta1=0.5, beta2=0.999, lambda_L1=100.):
         super().__init__()
 
