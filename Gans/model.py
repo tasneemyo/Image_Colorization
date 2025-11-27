@@ -122,6 +122,21 @@ class MainModel(nn.Module):
         self.loss_G = self.loss_G_GAN + self.loss_G_L1
         self.loss_G.backward()
 
+    # def optimize(self):
+    #     self.forward()
+    #     self.net_D.train()
+    #     self.set_requires_grad(self.net_D, True)
+    #     self.opt_D.zero_grad()
+    #     self.backward_D()
+    #     self.opt_D.step()
+
+    #     self.net_G.train()
+    #     self.set_requires_grad(self.net_D, False)
+    #     self.opt_G.zero_grad()
+    #     self.backward_G()
+    #     self.opt_G.step()
+
+
     def optimize(self):
         self.forward()
         self.net_D.train()
@@ -132,6 +147,8 @@ class MainModel(nn.Module):
 
         self.net_G.train()
         self.set_requires_grad(self.net_D, False)
-        self.opt_G.zero_grad()
-        self.backward_G()
-        self.opt_G.step()
+        # Train generator multiple times
+        for _ in range(5):  # Update G 5 times per D update
+            self.opt_G.zero_grad()
+            self.backward_G()
+            self.opt_G.step()
