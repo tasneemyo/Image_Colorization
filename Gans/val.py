@@ -4,7 +4,8 @@ from io import BytesIO
 import torch
 import numpy as np
 from skimage.color import rgb2lab
-from utils import lab_to_rgb,calculate_psnr,calculate_ssim
+# from utils import lab_to_rgb,calculate_psnr,calculate_ssim
+from Gans.utils import lab_to_rgb,calculate_psnr,calculate_ssim
 import matplotlib.pyplot as plt
  
 def download_image(url):
