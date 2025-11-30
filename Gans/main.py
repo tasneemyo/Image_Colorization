@@ -12,8 +12,8 @@ if __name__=="__main__":
     parser=argparse.ArgumentParser()
     parser.add_argument("--epochs",type=int)
     parser.add_argument("--data_path",type=str)
-    parser.add_argument("--train",type=bool)
-    parser.add_argument("--test",type=bool)
+    parser.add_argument("--train", action="store_true")
+    parser.add_argument("--test", action="store_true")
     parser.add_argument("--save_path",type=str,default="/kaggle/working/",required=False)
     parser.add_argument("--save_images",type=bool,default=False,required=False)
 
