@@ -71,5 +71,5 @@ if __name__=="__main__":
     print(f"Model saved at {model_file_path}")
     if args.test:
         val.test_model_with_images(model, val.image_urls)
-        val.test_model_with_metrics(model, test_dl, num_samples=10)
+        val.test_model_with_metrics(model, val_dl, num_samples=10)
     
