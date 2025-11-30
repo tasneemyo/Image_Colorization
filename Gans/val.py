@@ -4,9 +4,9 @@ from io import BytesIO
 import torch
 import numpy as np
 from skimage.color import rgb2lab
-from utils import lab_to_rgb,calculate_psnr,calculate_ssim
+from . import utils
 import matplotlib.pyplot as plt
- 
+
 def download_image(url):
     """
     Download an image from a URL and return it as a PIL Image.
@@ -43,7 +43,7 @@ def postprocess_and_display(L, ab, original_img):
     """
     L = L.cpu()
     ab = ab.cpu()
-    fake_rgb = lab_to_rgb(L, ab)[0]  # Convert first image in batch to RGB
+    fake_rgb = utils.utils.lab_to_rgb(L, ab)[0]  # Convert first image in batch to RGB
     fig, ax = plt.subplots(1, 3, figsize=(15, 5))
 
     # Display Original Image
@@ -123,13 +123,13 @@ def test_model_with_metrics(model, val_dl, num_samples=5):
         ab_real_cpu = ab_real.cpu()
         ab_fake_cpu = ab_fake.cpu()
 
-        real_images = lab_to_rgb(L_cpu, ab_real_cpu)  # Ground truth
-        fake_images = lab_to_rgb(L_cpu, ab_fake_cpu)  # Predicted
+        real_images = utils.lab_to_rgb(L_cpu, ab_real_cpu)  # Ground truth
+        fake_images = utils.lab_to_rgb(L_cpu, ab_fake_cpu)  # Predicted
 
         # Calculate PSNR and SSIM
         for i in range(len(real_images)):
-            psnr = calculate_psnr(real_images[i], fake_images[i])
-            ssim = calculate_ssim(real_images[i], fake_images[i])
+            psnr = utils.calculate_psnr(real_images[i], fake_images[i])
+            ssim = utils.calculate_ssim(real_images[i], fake_images[i])
             psnr_values.append(psnr)
             ssim_values.append(ssim)
 

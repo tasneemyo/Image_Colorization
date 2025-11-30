@@ -1,6 +1,6 @@
 import torch.nn as nn
 import torch
-from utils import init_model, GANLoss
+from . import utils
 from torch import optim
 class UnetBlock(nn.Module):
     def __init__(self, nf, ni, submodule=None, input_c=None, dropout=False,
@@ -84,11 +84,11 @@ class MainModel(nn.Module):
         self.lambda_L1 = lambda_L1
 
         if net_G is None:
-            self.net_G = init_model(Unet(input_c=1, output_c=2, n_down=8, num_filters=64), self.device)
+            self.net_G = utils.init_model(Unet(input_c=1, output_c=2, n_down=8, num_filters=64), self.device)
         else:
             self.net_G = net_G.to(self.device)
-        self.net_D = init_model(PatchDiscriminator(input_c=3, n_down=3, num_filters=64), self.device)
-        self.GANcriterion = GANLoss(gan_mode='vanilla').to(self.device)
+        self.net_D = utils.init_model(PatchDiscriminator(input_c=3, n_down=3, num_filters=64), self.device)
+        self.GANcriterion = utils.GANLoss(gan_mode='vanilla').to(self.device)
         self.L1criterion = nn.L1Loss()
         self.opt_G = optim.Adam(self.net_G.parameters(), lr=lr_G, betas=(beta1, beta2))
         self.opt_D = optim.Adam(self.net_D.parameters(), lr=lr_D, betas=(beta1, beta2))

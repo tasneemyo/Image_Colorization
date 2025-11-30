@@ -1,13 +1,13 @@
-from model import MainModel
-from train import train_model
+from . import model
+from . import train
 import torch
-from dataset import make_dataloaders
+from . import dataset
 import numpy as np
 import glob
 from torchsummary import summary
 import os
 import argparse
-from val import test_model_with_images,image_urls,test_model_with_metrics
+from . import val
 if __name__=="__main__":
     parser=argparse.ArgumentParser()
     parser.add_argument("--epochs",type=int)
@@ -20,7 +20,7 @@ if __name__=="__main__":
     args=parser.parse_args()
     
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = MainModel()
+    model = model.MainModel()
     print("Generator Summary:")
     summary(model.net_G, input_size=(1, 256, 256))  # Input: Grayscale image (1 channel)
 
@@ -45,8 +45,8 @@ if __name__=="__main__":
     val_idxs   = rand_idxs[split_point:]
     train_paths = paths_subset[train_idxs]
     val_paths   = paths_subset[val_idxs]
-    train_dl = make_dataloaders(paths=train_paths, split='train')
-    val_dl = make_dataloaders(paths=val_paths, split='val')
+    train_dl = dataset.make_dataloaders(paths=train_paths, split='train')
+    val_dl = dataset.make_dataloaders(paths=val_paths, split='val')
     print("Train =", len(train_paths), "Val =", len(val_paths))
     data = next(iter(train_dl))
     Ls, abs_ = data['L'], data['ab']
@@ -54,7 +54,7 @@ if __name__=="__main__":
     # print(len(train_dl), len(val_dl))  
     loss_G,loss_D=[],[]
     if args.train:
-        train_model(model, train_dl,val_dl,args.epochs,loss_D=loss_D,loss_G=loss_G)
+        train.train_model(model, train_dl,val_dl,args.epochs,loss_D=loss_D,loss_G=loss_G)
     save_path = args.save_path
 
 # Ensure the directory exists
@@ -66,6 +66,6 @@ if __name__=="__main__":
 
     print(f"Model saved at {model_file_path}")
     if args.test:
-        test_model_with_images(model, image_urls)
-        test_model_with_metrics(model, val_dl, num_samples=10)
+        val.test_model_with_images(model, val.image_urls)
+        val.test_model_with_metrics(model, val_dl, num_samples=10)
     

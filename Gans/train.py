@@ -1,6 +1,6 @@
 import json
 from tqdm import tqdm
-from utils import *
+from . import utils
 def update_losses(model, loss_meter_dict, count):
     for loss_name, loss_meter in loss_meter_dict.items():
         loss = getattr(model, loss_name)
@@ -52,7 +52,7 @@ def train_model(model, train_dl,val_dl, epochs, loss_G,loss_D,display_every=250)
             if i % display_every == 0:
                 print(f"\nEpoch {e+1}/{epochs}")
                 print(f"Iteration {i}/{len(train_dl)}")
-                log_results(loss_meter_dict) # function to print out the losses
+                utils.log_results(loss_meter_dict) # function to print out the losses
                 # visualize(model, data, save=False) # function displaying the model's outputs
     losses_to_save = {
         "loss_G": [float(x.avg) for x in loss_G],

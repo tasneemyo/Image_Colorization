@@ -7,7 +7,7 @@ from Gans.val import postprocess_and_display, preprocess_image
 from gui import Ui_MainWindow
 from PIL import Image
 import numpy as np
-from Gans.model import MainModel
+from Gans import model
 import torch
 import torchvision.transforms as T
 from torchvision import transforms
@@ -24,7 +24,7 @@ class MainApp(QMainWindow):
         # Connect buttons
         self.ui.upload.clicked.connect(self.upload_image)
         self.ui.colorize.clicked.connect(self.process_image)
-        self.model=MainModel()
+        self.model=model.MainModel()
         self.model.load_state_dict(torch.load(self.weights_path, map_location="cpu"))
         self.model.eval()
     def apply_styles(self):
