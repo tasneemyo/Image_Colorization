@@ -129,8 +129,8 @@ def visualize(model, data, save=True):
         fig.savefig(f"colorization_{int(time.time())}.png")
     
     # --- This ensures Kaggle actually renders the figure ---
-    plt.show(block=True)
-    plt.close(fig)  # Close figure to prevent memory issues
+    # plt.show(block=True)
+    # plt.close(fig)  # Close figure to prevent memory issues
 
 def log_results(loss_meter_dict):
     for loss_name, loss_meter in loss_meter_dict.items():

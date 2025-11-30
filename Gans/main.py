@@ -7,7 +7,7 @@ import glob
 from torchsummary import summary
 import os
 import argparse
-from . import val
+from . import val,utils
 if __name__=="__main__":
     parser=argparse.ArgumentParser()
     parser.add_argument("--epochs",type=int)
@@ -47,6 +47,7 @@ if __name__=="__main__":
     val_paths   = paths_subset[val_idxs]
     train_dl = dataset.make_dataloaders(paths=train_paths, split='train')
     val_dl = dataset.make_dataloaders(paths=val_paths, split='val')
+    test_dl = dataset.make_dataloaders(paths=test_color_paths, split='test')
     print("Train =", len(train_paths), "Val =", len(val_paths))
     data = next(iter(train_dl))
     Ls, abs_ = data['L'], data['ab']
@@ -67,6 +68,7 @@ if __name__=="__main__":
 
     print(f"Model saved at {model_file_path}")
     if args.test:
-        val.test_model_with_images(model, val.image_urls)
+        # val.test_model_with_images(model, val.image_urls)
+        utils.visualize(model, test_dl, save=True)
         val.test_model_with_metrics(model, val_dl, num_samples=10)
     
