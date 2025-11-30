@@ -53,7 +53,7 @@ def train_model(model, train_dl,val_dl, epochs, loss_G,loss_D,display_every=250)
                 print(f"\nEpoch {e+1}/{epochs}")
                 print(f"Iteration {i}/{len(train_dl)}")
                 utils.log_results(loss_meter_dict) # function to print out the losses
-                # visualize(model, data, save=False) # function displaying the model's outputs
+                utils.visualize(model, data, save=False) # function displaying the model's outputs
     losses_to_save = {
         "loss_G": [float(x.avg) for x in loss_G],
         "loss_D": [float(x.avg) for x in loss_D],

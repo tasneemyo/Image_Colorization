@@ -61,7 +61,7 @@ def postprocess_and_display(L, ab, original_img):
     ax[2].set_title("Colorized Output")
     ax[2].axis("off")
 
-    plt.show()
+    # plt.show()
 
 def test_model_with_images(model, image_urls, size=256):
     """
@@ -149,7 +149,7 @@ def test_model_with_metrics(model, val_dl, num_samples=5):
                 ax[2].set_title("Ground Truth")
                 ax[2].axis("off")
 
-                plt.show()
+                # plt.show()
 
                 samples_shown += 1
 
@@ -157,3 +157,4 @@ def test_model_with_metrics(model, val_dl, num_samples=5):
     avg_psnr = np.mean(psnr_values)
     avg_ssim = np.mean(ssim_values)
     print(f"Avg PSNR: {avg_psnr:.4f}, Avg SSIM: {avg_ssim:.4f}")
+    utils.visualize(model,data)
