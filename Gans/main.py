@@ -45,9 +45,11 @@ if __name__=="__main__":
     val_idxs   = rand_idxs[split_point:]
     train_paths = paths_subset[train_idxs]
     val_paths   = paths_subset[val_idxs]
+    print(val_paths[:2],test_color_paths[:2])
     train_dl = dataset.make_dataloaders(paths=train_paths, split='train')
     val_dl = dataset.make_dataloaders(paths=val_paths, split='val')
     test_dl = dataset.make_dataloaders(paths=test_color_paths, split='test')
+    print(val_dl,test_dl)
     print("Train =", len(train_paths), "Val =", len(val_paths))
     data = next(iter(train_dl))
     Ls, abs_ = data['L'], data['ab']
