@@ -43,7 +43,7 @@ def postprocess_and_display(L, ab, original_img):
     """
     L = L.cpu()
     ab = ab.cpu()
-    fake_rgb = utils.utils.lab_to_rgb(L, ab)[0]  # Convert first image in batch to RGB
+    fake_rgb = utils.lab_to_rgb(L, ab)[0]  # Convert first image in batch to RGB
     fig, ax = plt.subplots(1, 3, figsize=(15, 5))
 
     # Display Original Image
