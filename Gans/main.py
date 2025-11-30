@@ -71,6 +71,7 @@ if __name__=="__main__":
     print(f"Model saved at {model_file_path}")
     if args.test:
         # val.test_model_with_images(model, val.image_urls)
-        utils.visualize(model, val_dl, save=True)
+        data = next(iter(test_dl))
+        utils.visualize(model, data, save=True)
         val.test_model_with_metrics(model, val_dl, num_samples=10)
     
