@@ -1,6 +1,6 @@
 import json
 import matplotlib.pyplot as plt
-losses="Gans\losses (3).json"
+losses="Gans\losses.json"
 with open(losses,'r') as f:
     data=json.load(f)
 loss_G=data['loss_G']
