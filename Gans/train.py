@@ -1,14 +1,6 @@
 import json
 from tqdm import tqdm
 from . import utils
-def update_losses(model, loss_meter_dict, count):
-    for loss_name, loss_meter in loss_meter_dict.items():
-        loss = getattr(model, loss_name)
-        loss_meter.update(loss.item(), count=count)
-
-
-
-
 class AverageMeter:
     def __init__(self):
         self.reset()
@@ -36,7 +28,11 @@ def create_loss_meters():
             'loss_G_L1': loss_G_L1,
             'loss_G': loss_G}
 
-
+def update_losses(model, loss_meter_dict, count):
+    for loss_name, loss_meter in loss_meter_dict.items():
+        loss = getattr(model, loss_name)
+        loss_meter.update(loss.item(), count=count)
+        
 def train_model(model, train_dl,val_dl, epochs, loss_G,loss_D,display_every=250):
     data = next(iter(val_dl)) # getting a batch for visualizing the model output after fixed intrvals
     for e in range(epochs):

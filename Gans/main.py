@@ -38,7 +38,7 @@ if __name__=="__main__":
 
     rand_idxs = np.random.permutation(len(paths_subset))
 
-    # 80% train, 20% val (same as your original idea)
+    # 80% train, 20% val 
     split_point = int(len(paths_subset) * 0.8)
 
     train_idxs = rand_idxs[:split_point]
